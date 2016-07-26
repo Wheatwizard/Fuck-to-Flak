@@ -1,3 +1,8 @@
+import sys
+import re
+import optimizer
+
+
 def divideBrainFuck(brainfuck):
 	reducer = lambda x,y: x + [y] if y != x[-1][0] or y in "[]<" else x[:-1] + [x[-1]+y]
 	return reduce(reducer,[[brainfuck[0]]]+list(brainfuck[1:]))
@@ -21,10 +26,16 @@ if __name__ == "__main__":
 		exit()
 	#Open first file compile and write to second file
 	#Open files
-	infile = open(commandLineArgs[1])
-	string = infile.read()
-	infile.close()
+	try:
+		infile = open(commandLineArgs[1])
+		string = infile.read()
+		infile.close()
 
-	outfile = open(commandLineArgs[2],"w")	
-	outfile.write(compile(string))
-	outfile.close()
+		#Clean the string
+		string = re.sub("[^+-<>\[\]]","",string)
+	
+		outfile = open(commandLineArgs[2],"w")	
+		outfile.write(optimizer.optimize(compile(string)))
+		outfile.close()
+	except IOError:
+		print "File",commandLineArgs[1],"does not exist."
