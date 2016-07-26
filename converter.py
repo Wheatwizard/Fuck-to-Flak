@@ -14,5 +14,17 @@ def compile(brainfuck):
 	return "(({})(<>))" + "".join(map(filler, divideBrainFuck(brainfuck))) + "{}{}<>"
 
 if __name__ == "__main__":
-	snippet = "++>++>++<<[>]+"
-	print compile(snippet)
+	commandLineArgs = sys.argv
+	if len(commandLineArgs) != 3:
+		print "Please pass a input and output file."
+		print "(Usage: python %s BrainFuck BrainFlak)" %commandLineArgs[0]
+		exit()
+	#Open first file compile and write to second file
+	#Open files
+	infile = open(commandLineArgs[1])
+	string = infile.read()
+	infile.close()
+
+	outfile = open(commandLineArgs[2],"w")	
+	outfile.write(compile(string))
+	outfile.close()
